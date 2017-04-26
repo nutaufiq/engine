@@ -12,6 +12,14 @@ class Putusan_pengadilan_model extends MY_Model {
         parent::__construct();
     }
 
+    function get_publish_by($find, $key)
+    {
+        $this->db->where($find, $key);
+        $this->db->where('status', 1);
+
+        return $this->db->get($this->table)->row_array();
+    }
+
     function get_top_view($limit = 10)
     {
         $this->db->where('status', 1);
@@ -299,6 +307,7 @@ class Putusan_pengadilan_model extends MY_Model {
 
     function get_latest_document($limit = 2)
     {
+        $this->db->where('status', 1);
         $this->db->order_by('tahun_keputusan', 'desc');
         $this->db->limit($limit);
 

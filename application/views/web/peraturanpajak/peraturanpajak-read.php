@@ -1,6 +1,4 @@
 <div class="middle-column-title">Peraturan Pajak</div>
-<div class="middle-column-result">Jumlah Peraturan Pajak : <strong><?php echo $count_all; ?></strong> Peraturan Pajak
-<div class="P3-last-update">Terakhir diperbarui <span><?php echo format_tanggal_indonesia($latest_per['submit_date']); ?></span></div></div>
 
 <form class="p3-form" id="form-search" method="post" action="<?php echo site_url() ?>peraturan-pajak/do_search">
   <div class="form-putusan-pengadilan">
@@ -114,24 +112,14 @@
 </form>
 
 <!-- CONTOH ITEM HASIL SEARCH -->
-<?php
-foreach($result as $row)
-{
-?>
 <div class="search-result-item">
-  <div class="search-result-item-meta"><?php echo format_tanggal_indonesia($row['tanggal'], 'long'); ?> | View : <?php echo $row['view']; ?><!-- | <a href="">Download PDF</a>--></div>
+  <div class="search-result-item-meta"><?php echo format_tanggal_indonesia($result['tanggal'], 'long'); ?> | View : <?php echo $result['view']; ?><!-- | <a href="">Download PDF</a>--></div>
   <div class="search-result-item-title">
-    <!-- <a href="" data-toggle="modal" data-target="<?php echo ($this->user_auth->is_logged_in()) ? '.doc-modal' : ''; ?>" id="<?php echo $row['id']; ?>" data-idmodal="<?php echo $row['id']; ?>" class="modalcaller"><?php echo $row['jenis_dokumen_lengkap']; ?> Nomor: <?php echo $row['nomordokumen']; ?></a> -->
-    <a href="<?php echo site_url('peraturan-pajak/read/'.$row['permalink']); ?>" data-toggle="modal" data-target=".doc-modal" id="<?php echo $row['id']; ?>" data-idmodal="<?php echo $row['id']; ?>" data-remote="false" class="modalcaller"><?php echo $row['jenis_dokumen_lengkap']; ?> Nomor: <?php echo $row['nomordokumen']; ?></a>
+    <a href="<?php echo site_url('peraturan-pajak/read/'.$result['permalink']); ?>" data-toggle="modal" data-target=".doc-modal" id="<?php echo $result['id']; ?>" data-idmodal="<?php echo $result['id']; ?>" data-remote="false" class="modalcaller"><?php echo $result['jenis_dokumen_lengkap']; ?> Nomor: <?php echo $result['nomordokumen']; ?></a>
   </div>
   <div class="search-result-item-excerpt">
-    <?php echo $row['perihal']; ?>
+    <?php echo $result['perihal']; ?>
   </div>
-  <div class="search-result-item-more"><a href="<?php echo site_url('peraturan-pajak/read/'.$row['permalink']); ?>" data-toggle="modal" data-target=".doc-modal" id="<?php echo $row['id']; ?>" data-idmodal="<?php echo $row['id']; ?>" data-remote="false" class="modalcaller">Read More</a></div>
+  <div class="search-result-item-more"><a href="<?php echo site_url('peraturan-pajak/read/'.$result['permalink']); ?>" data-toggle="modal" data-target=".doc-modal" id="<?php echo $result['id']; ?>" data-idmodal="<?php echo $result['id']; ?>" data-remote="false" class="modalcaller">Read More</a></div>
 </div>
-<?php
-}
-?>
 <!-- END CONTOH ITEM HASIL SEARCH -->
-
-<nav class="search-pagination"><?php echo $paging; ?></nav>

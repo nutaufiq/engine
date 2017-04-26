@@ -97,7 +97,8 @@
             ?>
             </ul>
           </div>
-          <a href="" data-toggle="modal" data-target=".doc-modal" id="<?php echo $favourite['id']; ?>" data-idmodal="<?php echo $favourite['id']; ?>" class="modalcaller"><?php echo $favourite['jenis_dokumen_lengkap']; ?></a>
+          <a href="<?php echo site_url('peraturan-pajak/read/'.$favourite['permalink']); ?>" data-toggle="modal" data-target=".doc-modal" id="<?php echo $favourite['id']; ?>" data-idmodal="<?php echo $favourite['id']; ?>" data-remote="false" class="modalcaller">
+          <?php echo $favourite['jenis_dokumen_lengkap']; ?></a>
         </div>
         <div class="setting-docnumber"><?php echo $favourite['nomordokumen']; ?></div>
         <!--<div class="setting-docdelete"><a href="#" title="hapus" class="delete-favourite"><span class="glyphicon glyphicon-remove-sign"></span></a></div>-->
@@ -135,7 +136,8 @@
             ?>
             </ul>
           </div>
-          <a href="" data-toggle="modal" data-target=".doc-modal-p3b" data-id="<?php echo $favourite['p3b_id']; ?>" data-idmodal="<?php echo $favourite['p3b_id']; ?>" class="modalcaller-p3b">Perjanjian Penghindaran Pajak Berganda</a>
+          <a href="<?php echo site_url('p3b/read/'.$favourite['p3b_url']); ?>" data-toggle="modal" data-target=".doc-modal-p3b"  data-remote="false" class="modalcaller-p3b" data-id="<?php echo $favourite['p3b_id']; ?>" id="<?php echo $favourite['p3b_id']; ?>">
+          Perjanjian Penghindaran Pajak Berganda</a>
         </div>
         <div class="setting-docnumber"><?php echo $favourite['p3b_country']; ?></div>
         <!--<div class="setting-docdelete"><a href="#" title="hapus" class="delete-favourite"><span class="glyphicon glyphicon-remove-sign"></span></a></div>-->
@@ -174,7 +176,7 @@
             ?>
             </ul>
           </div>
-          <a href="" data-toggle="modal" data-target=".doc-modal-pp" class="modalcaller-pp" data-id="<?php echo $favourite['id']; ?>">Putusan Pengadilan Pajak</a>
+          <a href="<?php echo site_url('putusan-pengadilan-pajak/read/'.$favourite['permalink']); ?>" data-toggle="modal" data-target=".doc-modal-pp" data-remote="false"  class="modalcaller-pp" data-id="<?php echo $favourite['id']; ?>" id="<?php echo $favourite['id']; ?>">Putusan Pengadilan Pajak</a>
         </div>
         <div class="setting-docnumber"><?php echo $favourite['name']; ?></div>
         <!--<div class="setting-docdelete"><a href="#" title="hapus" class="delete-favourite"><span class="glyphicon glyphicon-remove-sign"></span></a></div>-->
@@ -213,7 +215,7 @@
             ?>
             </ul>
           </div>
-          <a href="" data-toggle="modal" data-target=".doc-modal-ma" class="modalcaller-ma" data-id="<?php echo $favourite['ma_id']; ?>">Putusan Mahkamah Agung</a>
+          <a href="<?php echo site_url('putusan-mahkamah-agung/read/'.$favourite['ma_url']); ?>" data-toggle="modal" data-target=".doc-modal-ma" data-remote="false" class="modalcaller-ma" data-id="<?php echo $favourite['ma_id']; ?>" id="<?php echo $favourite['ma_id']; ?>">Putusan Mahkamah Agung</a>
         </div>
         <div class="setting-docnumber"><?php echo $favourite['ma_number']; ?></div>
         <!--<div class="setting-docdelete"><a href="#" title="hapus" class="delete-favourite"><span class="glyphicon glyphicon-remove-sign"></span></a></div>-->

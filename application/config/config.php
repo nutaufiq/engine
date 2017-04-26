@@ -17,7 +17,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | environments.
 |
 */
-$config['base_url'] = 'http://engine.ddtc.co.id/';
+$config['base_url'] = 'http://localhost/taxengine/';
 
 /*
 |--------------------------------------------------------------------------
@@ -510,3 +510,8 @@ $config['proxy_ips'] = '';
 $config['web_title'] = 'DDTC Tax Engine - One Stop Indonesian Tax Documents';
 $config['perpage'] = 10;
 $config['perpage2'] = 15;
+
+$config['peraturan_pajak_login'] = false;
+$config['putusan_pengadilan_login'] = true;
+$config['p3b_login'] = false;
+$config['putusan_ma_login'] = true;

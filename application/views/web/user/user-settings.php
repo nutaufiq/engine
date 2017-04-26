@@ -54,11 +54,14 @@
         $lastseen = get_data_peraturan_pajak($row['lastseen_id']);
 
         $id = $lastseen['id'];
+        $permalink = $lastseen['permalink'];
         $jenis_dokumen_lengkap = $lastseen['jenis_dokumen_lengkap'];
         $nomordokumen = $lastseen['nomordokumen'];
       ?>
       <div class="setting-items">
-        <div class="setting-docname"><a href="" data-toggle="modal" data-target=".doc-modal" id="<?php echo $id; ?>" data-idmodal="<?php echo $id; ?>" class="modalcaller"><?php echo $jenis_dokumen_lengkap; ?></a></div>
+        <div class="setting-docname">
+        <a href="<?php echo site_url('peraturan-pajak/read/'.$permalink); ?>" data-toggle="modal" data-target=".doc-modal" id="<?php echo $id; ?>" data-idmodal="<?php echo $id; ?>" data-remote="false" class="modalcaller"><?php echo $jenis_dokumen_lengkap; ?></a>
+        </div>
         <div class="setting-docnumber"><?php echo $nomordokumen; ?></div>
         <!--<div class="setting-docdelete"><a href="" title="hapus" class="delete-lastseen"><span class="glyphicon glyphicon-remove-sign"></span></a></div>-->
       </div>

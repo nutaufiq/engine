@@ -166,6 +166,73 @@ class Putusan_pengadilan_pajak extends My_Controller {
 		$this->template->load('web/template/template-2', 'web/pp/pp', $data);
 	}
 
+	public function get_social()
+	{
+		$id = $this->input->post('id');
+
+		$data = $this->putusan_pengadilan_model->get($id);
+
+		$url = site_url('putusan-pengadilan-pajak/read/'.$data['permalink']);
+
+		$html ='<a href="https://www.facebook.com/sharer/sharer.php?u='.$url.'" target="_blank" id="share-facebook"><span class="socicon socicon-facebook"></a>
+				<a href="https://twitter.com/intent/tweet?url='.$url.'" target="_blank" id="share-twitter"><span class="socicon socicon-twitter"></a>
+				<a href="https://www.linkedin.com/shareArticle?url='.$url.'" target="_blank" id="share-linkedin"><span class="socicon socicon-linkedin"></a>
+				<a href="https://plus.google.com/share?url='.$url.'" target="_blank" id="share-googleplus"><span class="socicon socicon-googleplus"></a>
+				<a href="http://line.me/R/msg/text/?'.$url.'" target="_blank" id="share-line"><span class="socicon socicon-line"></a>
+				<a href="whatsapp://send?text='.$url.'" target="_blank" id="share-whatsapp"><span class="socicon socicon-whatsapp"></a>';
+
+		echo $html;
+	}
+
+	public function read($url)
+	{
+		$result = $this->putusan_pengadilan_model->get_publish_by('permalink', $url);
+
+		$data['jenis_pp'] = $this->putusan_pengadilan_model->get_jenis_pp();
+		$data['tahun_pp'] = $this->putusan_pengadilan_model->get_tahun_pp();
+		$data['pp_key'] = "";
+		$data['pp_number'] = "";
+
+		$data['result'] = $result;
+
+		$title = 'Putusan Pengadilan Pajak Nomor : '.$result['name'].' - Putusan Pengadilan Pajak - '.$this->config->item('web_title');
+		$description = substr(trim(preg_replace('/\s\s+/', ' ', strip_tags($result['isi_putusan']))), 0, 255);
+
+		$keywords = 'Putusan Pengadilan Pajak '.$result['name'];
+		$keywords = str_replace(" ", ", ", strtolower($keywords));
+
+		$data['meta'] =  '<meta name="description" content="'.$description.'">
+						  <meta name="keywords" content="ddtc, taxengine, '.$keywords.'">
+						  <meta name="author" content="TAX ENGINE">
+
+						  <!-- facebook -->
+						  <meta property="og:url"           content="'.current_url().'" />
+						  <meta property="og:type"          content="website" />
+						  <meta property="og:title"         content="'.$title.'" />
+						  <meta property="og:description"   content="'.$description.'" />
+						  <meta property="og:image"         content="'.site_url('cover.jpg').'" />
+
+						  <!-- twitter -->
+						  <meta name="twitter:card" content="summary">
+						  <meta name="twitter:url" content="'.current_url().'">
+						  <meta name="twitter:title" content="'.$title.'">
+						  <meta name="twitter:description" content="'.$description.'">
+						  <meta name="twitter:image" content="'.site_url('cover.jpg').'">';
+
+		$data['javascript'] = 	"<script>
+							      $(document).ready(function(){
+							        $('.modalcaller-pp#".$result['id']."').trigger( 'click', [ '".$result['id']."' ]  );
+
+							        return false;
+							      });
+							    </script>";
+
+		$this->template->set('container_class', 'search-page');
+
+		$this->template->set('title', 'Putusan Pengadilan Pajak Nomor : '.$result['name'].' - Putusan Pengadilan Pajak - '.$this->config->item('web_title'));
+		$this->template->load('web/template/template-2', 'web/pp/pp-read', $data);
+	}
+
 	public function do_search_()
 	{
 		$search_key = $this->input->post('search_key');
@@ -343,8 +410,33 @@ class Putusan_pengadilan_pajak extends My_Controller {
 
 	public function get_single_content()
 	{
-		if($this->user_auth->is_logged_in())
+		// if($this->user_auth->is_logged_in())
+		if($this->config->item('putusan_pengadilan_login') && !$this->user_auth->is_logged_in())
 		{
+			$pp_id = $this->input->post('pp_id');
+
+			//content
+			$pp_full = $this->get_document($pp_id);
+
+			//favourite
+			$favourite = $this->get_favourite($pp_id);
+
+			echo json_encode(
+						array(
+								'st' 			=> 1,
+								'full_content' 	=> '<div class="nologin-readmore"><a href="" id="readmore-login">READ MORE</a></div>'.$pp_full,
+								'favourite' 	=> $favourite
+							)
+						);
+		}
+		else
+		{
+			// echo json_encode(
+			// 			array(
+			// 					'st' 			=> 0
+			// 				)
+			// 			);
+
 			$pp_id = $this->input->post('pp_id');
 
 			//content
@@ -358,14 +450,6 @@ class Putusan_pengadilan_pajak extends My_Controller {
 								'st' 			=> 1,
 								'full_content' 	=> $pp_full,
 								'favourite' 	=> $favourite
-							)
-						);
-		}
-		else
-		{
-			echo json_encode(
-						array(
-								'st' 			=> 0
 							)
 						);
 		}

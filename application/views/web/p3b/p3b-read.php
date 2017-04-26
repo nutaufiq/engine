@@ -1,6 +1,4 @@
 <div class="middle-column-title">Perjanjian Penghindaran Pajak Berganda</div>
-<div class="middle-column-result">Jumlah Perjanjian Penghindaran Pajak Berganda : <span><?php echo $count; ?> </span>Dokumen P3B
-<div class="P3-last-update">Terakhir diperbarui <span><?php echo format_tanggal_indonesia($latest_p3b['p3b_update']); ?></span></div></div>
 
 <div class="input-group treaty-form">
   <div class="form-putusan-pengadilan">
@@ -111,22 +109,12 @@
 
 <div class="treaty-clearfix"></div>
 
-<?php
-foreach($p3b as $row)
-{
-?>
-
 <div class="treaty-item">
-  <div class="col-md-4 treaty-flag"><a href="<?php echo site_url('p3b/read/'.$row['p3b_url']); ?>" data-toggle="modal" data-target=".doc-modal-p3b"  data-remote="false" class="modalcaller-p3b" data-id="<?php echo $row['p3b_id']; ?>" id="<?php echo $row['p3b_id']; ?>"><img class="img-responsive" src="<?php echo site_url(); ?>assets/themes/images/flag/flag-<?php echo strtolower($row['p3b_country']); ?>.png"></a></div>
+  <div class="col-md-4 treaty-flag"><a href="<?php echo site_url('p3b/read/'.$p3b['p3b_url']); ?>" data-toggle="modal" data-target=".doc-modal-p3b"  data-remote="false" class="modalcaller-p3b" data-id="<?php echo $p3b['p3b_id']; ?>" id="<?php echo $p3b['p3b_id']; ?>"><img class="img-responsive" src="<?php echo site_url(); ?>assets/themes/images/flag/flag-<?php echo strtolower($p3b['p3b_country']); ?>.png"></a></div>
   <div class="col-md-8">
-    <div class="treaty-effective">Effective : <?php echo format_tanggal_indonesia($row['p3b_date_effective']); ?></div>
-    <div class="treaty-country"><a href="<?php echo site_url('p3b/read/'.$row['p3b_url']); ?>" data-toggle="modal" data-target=".doc-modal-p3b" data-remote="false" class="modalcaller-p3b" data-id="<?php echo $row['p3b_id']; ?>" id="<?php echo $row['p3b_id']; ?>"><?php echo $row['p3b_country']; ?></a></div>
-    <div class="treaty-signed">Signed : <span><?php echo format_tanggal_indonesia($row['p3b_date_signed']); ?></span></div>
+    <div class="treaty-effective">Effective : <?php echo format_tanggal_indonesia($p3b['p3b_date_effective']); ?></div>
+    <div class="treaty-country"><a href="<?php echo site_url('p3b/read/'.$row['p3b_url']); ?>" data-toggle="modal" data-target=".doc-modal-p3b" data-remote="false" class="modalcaller-p3b" data-id="<?php echo $p3b['p3b_id']; ?>" id="<?php echo $p3b['p3b_id']; ?>"><?php echo $p3b['p3b_country']; ?></a></div>
+    <div class="treaty-signed">Signed : <span><?php echo format_tanggal_indonesia($p3b['p3b_date_signed']); ?></span></div>
   </div>
 </div>
-
-<?php
-}
-?>
 <div style="display:block;clear:both;"></div>
-<nav class="search-pagination"><?php echo $paging; ?></nav>

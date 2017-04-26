@@ -63,7 +63,7 @@ class Mahkamahagung extends CI_Controller {
          	$ma_content = $this->input->post('ma_content', FALSE);
 
          	$data = array(
-         			'ma_url'			=> url_title('Keputusan Mahkamah Agung Nomor: '.$ma_number, '-', TRUE),
+         			'ma_url'			=> url_title('Putusan Mahkamah Agung Nomor: '.$ma_number, '-', TRUE),
          			'ma_number'			=> $ma_number,
          			'ma_year'			=> $ma_year,
          			'ma_content'		=> $ma_content,
@@ -118,7 +118,7 @@ class Mahkamahagung extends CI_Controller {
          	else $mas = $ma_status;
 
          	$data = array(
-         			'ma_url'			=> url_title('Keputusan Mahkamah Agung Nomor: '.$ma_number, '-', TRUE),
+         			'ma_url'			=> url_title('Putusan Mahkamah Agung Nomor: '.$ma_number, '-', TRUE),
          			'ma_number'			=> $ma_number,
          			'ma_year'			=> $ma_year,
          			'ma_content'		=> $ma_content,

@@ -1,8 +1,4 @@
 <div class="middle-column-title">Putusan Pengadilan Pajak</div>
-  <div class="middle-column-result">
-    Jumlah Putusan Pengadilan Pajak : <span><?php echo $count; ?></span> Putusan 
-    <div class="P3-last-update">Terakhir diperbarui <span><?php echo format_tanggal_indonesia($latest_pp['modified']); ?></span></div>
-  </div>
 
 
 <form class="p3-form" action="<?php echo site_url(); ?>putusan-pengadilan-pajak/do_search" method="post" id="form-search-pp">
@@ -100,17 +96,8 @@
   <div id="msg-search-pp"></div>
 </form>
 
-<div class="toolbar">
-  Urut berdasarkan : 
-  <button type="button" class="btn btn-default btn-xs" data-toggle="dropdown" aria-expanded="false" data-url="<?php echo $url_year; ?>" id="pp-tahun">Tahun <span class="glyphicon glyphicon-sort"></span></button>
-  |
-  <button type="button" class="btn btn-default btn-xs" data-toggle="dropdown" aria-expanded="false" data-url="<?php echo $url_number; ?>" id="pp-nomor">Nomor <span class="glyphicon glyphicon-sort"></span></button>
-</div>
-
 <?php
-foreach($result as $row)
-{
-  $jenis_pajak = $row['jenis_pajak'];
+  $jenis_pajak = $result['jenis_pajak'];
   
   $jenis_pajak = str_replace('&lt;p&gt;', '', $jenis_pajak);
   $jenis_pajak = str_replace('&lt;/p&gt;', '', $jenis_pajak);
@@ -138,15 +125,15 @@ foreach($result as $row)
 ?>
 <div class="p3-search-item">
   <div class="p3-category"><?php echo $jenis_pajak; ?></div>
-  <div class="search-result-item-meta"><?php echo format_tanggal_indonesia($row['created'], 'long'); ?> | View: <?php echo $row['view'];?></div>
+  <div class="search-result-item-meta"><?php echo format_tanggal_indonesia($result['created'], 'long'); ?> | View: <?php echo $result['view'];?></div>
   <div class="p3-title">
-    <a href="<?php echo site_url('putusan-pengadilan-pajak/read/'.$row['permalink']); ?>" data-toggle="modal" data-target=".doc-modal-pp" data-remote="false"  class="modalcaller-pp" data-id="<?php echo $row['id']; ?>" id="<?php echo $row['id']; ?>">
-      <?php echo $row['name'];?>
+    <a href="<?php echo site_url('putusan-pengadilan-pajak/read/'.$result['permalink']); ?>" data-toggle="modal" data-target=".doc-modal-pp" data-remote="false"  class="modalcaller-pp" data-id="<?php echo $result['id']; ?>" id="<?php echo $result['id']; ?>">
+      <?php echo $result['name'];?>
     </a>
   </div>
   <div class="p3-desc">
 <?php
-  /*$pokok_sengketa = $row['pokok_sengketa'];
+  /*$pokok_sengketa = $result['pokok_sengketa'];
   $pokok_sengketa = strip_tags(html_entity_decode($pokok_sengketa));
   $pokok_sengketa = str_replace(';', '', $pokok_sengketa);
   //$pokok_sengketa = str_replace(':', '', $pokok_sengketa);
@@ -154,15 +141,10 @@ foreach($result as $row)
 
   echo $pokok_sengketa;*/
 
-  $isi_putusan = $row['isi_putusan'];
+  $isi_putusan = $result['isi_putusan'];
   $isi_putusan = strip_tags(html_entity_decode($isi_putusan));
 
   echo character_limiter($isi_putusan, 500); 
 ?>
   </div>
 </div>
-<?php
-}
-?>
-
-<nav class="search-pagination"><?php echo $paging; ?></nav>

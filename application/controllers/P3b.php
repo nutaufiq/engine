@@ -17,6 +17,25 @@ class P3b extends My_Controller {
     	$this->load->helper('peraturan_pajak_helper');
 	}
 
+	public function update_url()
+	{
+		$p3b = $this->p3b_model->get_all();
+
+		foreach($p3b as $row)
+		{
+			$p3b_id = $row['p3b_id'];
+			$p3b_country = $row['p3b_country'];
+
+			$p3b_url = url_title($p3b_country, '-', TRUE);
+
+			$data = array(
+                    'p3b_url' => $p3b_url,
+                );
+
+            $this->p3b_model->update($p3b_id, $data);
+		}
+	}
+
 	public function index()
 	{
 		if(empty($this->uri->segment(3))) $page = 1;
@@ -66,10 +85,100 @@ class P3b extends My_Controller {
 		$this->template->load('web/template/template-2', 'web/p3b/p3b', $data);
 	}
 
+	public function get_social()
+	{
+		$id = $this->input->post('id');
+
+		$data = $this->p3b_model->get($id);
+
+		$url = site_url('p3b/read/'.$data['p3b_url']);
+
+		$html ='<a href="https://www.facebook.com/sharer/sharer.php?u='.$url.'" target="_blank" id="share-facebook"><span class="socicon socicon-facebook"></a>
+				<a href="https://twitter.com/intent/tweet?url='.$url.'" target="_blank" id="share-twitter"><span class="socicon socicon-twitter"></a>
+				<a href="https://www.linkedin.com/shareArticle?url='.$url.'" target="_blank" id="share-linkedin"><span class="socicon socicon-linkedin"></a>
+				<a href="https://plus.google.com/share?url='.$url.'" target="_blank" id="share-googleplus"><span class="socicon socicon-googleplus"></a>
+				<a href="http://line.me/R/msg/text/?'.$url.'" target="_blank" id="share-line"><span class="socicon socicon-line"></a>
+				<a href="whatsapp://send?text='.$url.'" target="_blank" id="share-whatsapp"><span class="socicon socicon-whatsapp"></a>';
+
+		echo $html;
+	}
+
+	public function read($url)
+	{
+		$p3b = $this->p3b_model->get_publish_by('p3b_url', $url);
+		$result = $p3b;
+
+		$data['p3b'] = $p3b;
+		$data['country'] = $this->p3b_model->get_all_publish_country_name();
+		$data['count'] = $this->p3b_model->count();
+		$data['latest_p3b'] = $this->p3b_model->get_latest_p3b();
+
+		$title = $result['p3b_country'].' - Perjanjian Penghindaran Pajak Berganda (P3B) - '.$this->config->item('web_title');
+		$description = substr(trim(preg_replace('/\s\s+/', ' ', strip_tags($result['p3b_header_id']))), 0, 255);
+
+		$keywords = 'Perjanjian Penghindaran Pajak Berganda P3B '.$result['p3b_country'];
+		$keywords = str_replace(" ", ", ", strtolower($keywords));
+
+		$data['meta'] =  '<meta name="description" content="'.$description.'">
+						  <meta name="keywords" content="ddtc, taxengine, '.$keywords.'">
+						  <meta name="author" content="TAX ENGINE">
+
+						  <!-- facebook -->
+						  <meta property="og:url"           content="'.current_url().'" />
+						  <meta property="og:type"          content="website" />
+						  <meta property="og:title"         content="'.$title.'" />
+						  <meta property="og:description"   content="'.$description.'" />
+						  <meta property="og:image"         content="'.site_url('cover.jpg').'" />
+
+						  <!-- twitter -->
+						  <meta name="twitter:card" content="summary">
+						  <meta name="twitter:url" content="'.current_url().'">
+						  <meta name="twitter:title" content="'.$title.'">
+						  <meta name="twitter:description" content="'.$description.'">
+						  <meta name="twitter:image" content="'.site_url('cover.jpg').'">';
+
+		$data['javascript'] = 	"<script>
+							      $(document).ready(function(){
+							        $('.modalcaller-p3b#".$p3b['p3b_id']."').trigger( 'click', [ '".$p3b['p3b_id']."' ]  );
+
+							        return false;
+							      });
+							    </script>";
+
+		$this->template->set('container_class', 'search-page');
+
+		$this->template->set('title', $result['p3b_country'].' - Perjanjian Penghindaran Pajak Berganda (P3B) - '.$this->config->item('web_title'));
+		$this->template->load('web/template/template-2', 'web/p3b/p3b-read', $data);
+	}
+
 	public function get_single_content()
 	{
-		if($this->user_auth->is_logged_in())
+		if($this->config->item('p3b_login') && !$this->user_auth->is_logged_in())
 		{
+			$p3b_id = $this->input->post('p3b_id');
+
+			//content
+			$p3b_full = $this->get_document($p3b_id);
+
+			//favourite
+			$favourite = $this->get_favourite($p3b_id);
+
+			echo json_encode(
+						array(
+								'st' 			=> 1,
+								'full_content' 	=> '<div class="nologin-readmore"><a href="" id="readmore-login">READ MORE</a></div>'.$p3b_full,
+								'favourite' 	=> $favourite
+							)
+						);
+		}
+		else
+		{
+			// echo json_encode(
+			// 			array(
+			// 					'st' 			=> 0
+			// 				)
+			// 			);
+
 			$p3b_id = $this->input->post('p3b_id');
 
 			//content
@@ -83,14 +192,6 @@ class P3b extends My_Controller {
 								'st' 			=> 1,
 								'full_content' 	=> $p3b_full,
 								'favourite' 	=> $favourite
-							)
-						);
-		}
-		else
-		{
-			echo json_encode(
-						array(
-								'st' 			=> 0
 							)
 						);
 		}

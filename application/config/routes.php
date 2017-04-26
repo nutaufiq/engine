@@ -58,6 +58,7 @@ $route['peraturan-pajak'] = 'peraturan_pajak';
 $route['peraturan-pajak'] = 'peraturan_pajak';
 $route['peraturan-pajak/index'] = 'peraturan_pajak/index';
 $route['peraturan-pajak/index/(:num)'] = 'peraturan_pajak/index/$1';
+$route['peraturan-pajak/read/(:any)'] = 'peraturan_pajak/read/$1';
 $route['peraturan-pajak/download/(:any)/(:num)'] = 'peraturan_pajak/download/$1/$1';
 $route['peraturan-pajak/topsearch'] = 'peraturan_pajak/topsearch';
 $route['peraturan-pajak/search'] = 'peraturan_pajak/search';
@@ -88,6 +89,7 @@ $route['peraturan-pajak/get_riwayat'] = 'peraturan_pajak/get_riwayat';
 
 $route['putusan-pengadilan-pajak/index'] = 'putusan_pengadilan_pajak/index';
 $route['putusan-pengadilan-pajak/index/(:num)'] = 'putusan_pengadilan_pajak/index/$1';
+$route['putusan-pengadilan-pajak/read/(:any)'] = 'putusan_pengadilan_pajak/read/$1';
 $route['putusan-pengadilan-pajak/search'] = 'putusan_pengadilan_pajak/search';
 $route['putusan-pengadilan-pajak/search/(:any)'] = 'putusan_pengadilan_pajak/search/$1';
 $route['putusan-pengadilan-pajak/search/(:any)/(:any)'] = 'putusan_pengadilan_pajak/search/$1/$2';
@@ -101,6 +103,7 @@ $route['putusan-pengadilan-pajak/do_search'] = 'putusan_pengadilan_pajak/do_sear
 
 $route['putusan-mahkamah-agung/index'] = 'putusan_mahkamah_agung/index';
 $route['putusan-mahkamah-agung/index/(:num)'] = 'putusan_mahkamah_agung/index/$1';
+$route['putusan-mahkamah-agung/read/(:any)'] = 'putusan_mahkamah_agung/read/$1';
 $route['putusan-mahkamah-agung/search'] = 'putusan_mahkamah_agung/search';
 $route['putusan-mahkamah-agung/search/(:any)'] = 'putusan_mahkamah_agung/search/$1';
 $route['putusan-mahkamah-agung/search/(:any)/(:any)'] = 'putusan_mahkamah_agung/search/$1/$2';

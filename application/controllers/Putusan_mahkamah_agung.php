@@ -18,6 +18,15 @@ class Putusan_mahkamah_agung extends My_Controller {
     	$this->load->helper('text');
 	}
 
+	public function testurl()
+	{
+		$nomor = 'Put-30952/PP/M.XIV/19/2011';
+		$nomor = str_replace("/"," ",$nomor);
+		$nomor = str_replace("."," ",$nomor);
+
+		echo url_title($nomor, '-', TRUE);
+	}
+
 	public function index()
 	{
 		//------
@@ -101,6 +110,74 @@ class Putusan_mahkamah_agung extends My_Controller {
 
 		$this->template->set('title', 'Putusan Mahkamah Agung - '.$this->config->item('web_title'));
 		$this->template->load('web/template/template-2', 'web/ma/ma', $data);
+	}
+
+	public function get_social()
+	{
+		$id = $this->input->post('id');
+
+		$data = $this->putusan_ma_model->get($id);
+
+		$url = site_url('putusan-mahkamah-agung/read/'.$data['ma_url']);
+
+		$html ='<a href="https://www.facebook.com/sharer/sharer.php?u='.$url.'" target="_blank" id="share-facebook"><span class="socicon socicon-facebook"></a>
+				<a href="https://twitter.com/intent/tweet?url='.$url.'" target="_blank" id="share-twitter"><span class="socicon socicon-twitter"></a>
+				<a href="https://www.linkedin.com/shareArticle?url='.$url.'" target="_blank" id="share-linkedin"><span class="socicon socicon-linkedin"></a>
+				<a href="https://plus.google.com/share?url='.$url.'" target="_blank" id="share-googleplus"><span class="socicon socicon-googleplus"></a>
+				<a href="http://line.me/R/msg/text/?'.$url.'" target="_blank" id="share-line"><span class="socicon socicon-line"></a>
+				<a href="whatsapp://send?text='.$url.'" target="_blank" id="share-whatsapp"><span class="socicon socicon-whatsapp"></a>';
+
+		echo $html;
+	}	
+
+	public function read($url)
+	{
+		$result = $this->putusan_ma_model->get_publish_by('ma_url', $url);
+
+		$data['result'] = $result;
+
+		$data['tahun_ma'] = $this->putusan_ma_model->get_tahun_ma();
+		$data['count'] = $this->putusan_ma_model->count();
+		$data['ma_number'] = "";
+		$data['ma_key'] = "";
+        $data['latest_ma'] = $this->putusan_ma_model->get_latest_ma();
+
+        $title = 'Putusan Mahkamah Agung Nomor: '.$result['ma_number'].' - Putusan Mahkamah Agung - '.$this->config->item('web_title');
+		$description = substr(trim(preg_replace('/\s\s+/', ' ', strip_tags($result['ma_content']))), 0, 255);
+
+		$keywords = 'Putusan Mahkamah Agung '.$result['ma_number'];
+		$keywords = str_replace(" ", ", ", strtolower($keywords));
+
+		$data['meta'] =  '<meta name="description" content="'.$description.'">
+						  <meta name="keywords" content="ddtc, taxengine, '.$keywords.'">
+						  <meta name="author" content="TAX ENGINE">
+
+						  <!-- facebook -->
+						  <meta property="og:url"           content="'.current_url().'" />
+						  <meta property="og:type"          content="website" />
+						  <meta property="og:title"         content="'.$title.'" />
+						  <meta property="og:description"   content="'.$description.'" />
+						  <meta property="og:image"         content="'.site_url('cover.jpg').'" />
+
+						  <!-- twitter -->
+						  <meta name="twitter:card" content="summary">
+						  <meta name="twitter:url" content="'.current_url().'">
+						  <meta name="twitter:title" content="'.$title.'">
+						  <meta name="twitter:description" content="'.$description.'">
+						  <meta name="twitter:image" content="'.site_url('cover.jpg').'">';
+
+        $data['javascript'] = 	"<script>
+							      $(document).ready(function(){
+							        $('.modalcaller-ma#".$result['ma_id']."').trigger( 'click', [ '".$result['ma_id']."' ]  );
+
+							        return false;
+							      });
+							    </script>";
+
+		$this->template->set('container_class', 'search-page');
+
+		$this->template->set('title', 'Putusan Mahkamah Agung Nomor: '.$result['ma_number'].' - Putusan Mahkamah Agung - '.$this->config->item('web_title'));
+		$this->template->load('web/template/template-2', 'web/ma/ma-read', $data);
 	}
 
 	public function do_search()
@@ -260,8 +337,32 @@ class Putusan_mahkamah_agung extends My_Controller {
 
 	public function get_single_content()
 	{
-		if($this->user_auth->is_logged_in())
+		if($this->config->item('putusan_ma_login') && !$this->user_auth->is_logged_in())
 		{
+			$ma_id = $this->input->post('ma_id');
+
+			//content
+			$ma_full = $this->get_document($ma_id);
+
+			//favourite
+			$favourite = $this->get_favourite($ma_id);
+
+			echo json_encode(
+						array(
+								'st' 			=> 1,
+								'full_content' 	=> '<div class="nologin-readmore"><a href="" id="readmore-login">READ MORE</a></div>'.$ma_full,
+								'favourite' 	=> $favourite
+							)
+						);
+		}
+		else
+		{
+			// echo json_encode(
+			// 			array(
+			// 					'st' 			=> 0
+			// 				)
+			// 			);
+
 			$ma_id = $this->input->post('ma_id');
 
 			//content
@@ -275,14 +376,6 @@ class Putusan_mahkamah_agung extends My_Controller {
 								'st' 			=> 1,
 								'full_content' 	=> $ma_full,
 								'favourite' 	=> $favourite
-							)
-						);
-		}
-		else
-		{
-			echo json_encode(
-						array(
-								'st' 			=> 0
 							)
 						);
 		}

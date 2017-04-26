@@ -1,12 +1,13 @@
 <!-- KOLOM KANAN -->
 <div class="col-md-3 right-bar columns"> 
 
-  <div class="profile-recap">
-    <?php 
+  <?php 
     if($this->user_auth->is_logged_in())
     {
-    ?>
-	<a href="http://www.ddtc.co.id/en/publication/440/perjanjian-penghindaran-pajak-berganda/" target="blank" id="bannerimage">
+  ?>
+  <div class="profile-recap">
+    
+	  <a href="http://www.ddtc.co.id/en/publication/440/perjanjian-penghindaran-pajak-berganda/" target="blank" id="bannerimage">
 		<div style="overflow:hidden">
 			<img alt="" src="http://engine.ddtc.co.id/assets/themes/images/books.jpg" style="width:100%;margin:10px 0px 10px -10px">                              
 		</div>	  
@@ -32,7 +33,7 @@
         {
       ?>
         <div class="profile-recap-item">
-          <a href="" data-toggle="modal" data-target="<?php echo ($this->user_auth->is_logged_in()) ? '.doc-modal' : ''; ?>" id="<?php echo $data['id']; ?>" data-idmodal="<?php echo $data['id']; ?>" class="modalcaller">
+          <a href="<?php echo site_url('peraturan-pajak/read/'.$data['permalink']); ?>" data-toggle="modal" data-target=".doc-modal" id="<?php echo $data['id']; ?>" data-idmodal="<?php echo $data['id']; ?>" data-remote="false" class="modalcaller">
             <?php echo $data['jenis_dokumen_lengkap']; ?><br>
             <?php echo $data['nomordokumen']; ?><br>
           </a>
@@ -87,9 +88,6 @@
       }
       ?>
     </div>
-    <?php
-    }
-    ?>
 
     <div class="profile-recap-section">
       <div class="right-mini-title">Dokumen Terakhir Dilihat</div>
@@ -99,7 +97,7 @@
       {
       ?>
       <div class="profile-recap-item">
-        <a href="" data-toggle="modal" data-target="<?php echo ($this->user_auth->is_logged_in()) ? '.doc-modal' : ''; ?>" id="<?php echo $row['id']; ?>" data-idmodal="<?php echo $row['id']; ?>" class="modalcaller">
+        <a href="<?php echo site_url('peraturan-pajak/read/'.$row['permalink']); ?>" data-toggle="modal" data-target=".doc-modal" id="<?php echo $row['id']; ?>" data-idmodal="<?php echo $row['id']; ?>" data-remote="false" class="modalcaller">
           <?php echo $row['jenis_dokumen_lengkap']; ?><br>
           <?php echo $row['nomordokumen']; ?><br>
         </a>
@@ -154,6 +152,7 @@
 
     </div>
 
+
     <?php 
     if($this->user_auth->is_logged_in())
     {
@@ -168,6 +167,9 @@
     }
     ?>
   </div>
+  <?php
+    }
+  ?>
 
   <div class="right-menu-title">Dokumen Terbaru</div>
   <div class="latest-document">
@@ -179,7 +181,7 @@
 		  foreach($latest_document_1 as $row)
 		  {
 		  ?>
-			<a href="" data-toggle="modal" data-target="<?php echo ($this->user_auth->is_logged_in()) ? '.doc-modal' : ''; ?>" id="<?php echo $row['id']; ?>" data-idmodal="<?php echo $row['id']; ?>" class="modalcaller">
+			<a href="<?php echo site_url('peraturan-pajak/read/'.$row['permalink']); ?>" data-toggle="modal" data-target=".doc-modal" id="<?php echo $row['id']; ?>" data-idmodal="<?php echo $row['id']; ?>" data-remote="false" class="modalcaller">
 			  <?php echo $row['jenis_dokumen_lengkap']; ?>
 			  <?php echo $row['nomordokumen']; ?>
 			</a>
@@ -197,7 +199,7 @@
 		  foreach($latest_document_pp_1 as $row)
 		  {
 		  ?>
-			<a href="" data-toggle="modal" data-target="<?php echo ($this->user_auth->is_logged_in()) ? '.doc-modal-pp' : ''; ?>" data-id="<?php echo $row['id']; ?>" data-idmodal="<?php echo $row['id']; ?>" class="modalcaller-pp">
+			<a href="<?php echo site_url('putusan-pengadilan-pajak/read/'.$row['permalink']); ?>" data-toggle="modal" data-target=".doc-modal-pp" data-remote="false"  class="modalcaller-pp" data-id="<?php echo $row['id']; ?>" id="<?php echo $row['id']; ?>">
 			  Putusan Pengadilan Pajak<br />
 			  <?php echo $row['nomor']; ?>
 			</a>
@@ -215,7 +217,7 @@
 		  foreach($latest_document_p3b_1 as $row)
 		  {
 		  ?>
-			<a href="" data-toggle="modal" data-target="<?php echo ($this->user_auth->is_logged_in()) ? '.doc-modal-p3b' : ''; ?>" data-id="<?php echo $row['p3b_id']; ?>" data-idmodal="<?php echo $row['p3b_id']; ?>" class="modalcaller-p3b">
+			<a href="<?php echo site_url('p3b/read/'.$row['p3b_url']); ?>" data-toggle="modal" data-target=".doc-modal-p3b" data-remote="false" class="modalcaller-p3b" data-id="<?php echo $row['p3b_id']; ?>" id="<?php echo $row['p3b_id']; ?>">
 			  Perjanjian Penghindaran Pajak Berganda<br />
 			  <?php echo $row['p3b_country']; ?>
 			</a>
@@ -233,7 +235,7 @@
 		  foreach($latest_document_ma_1 as $row)
 		  {
 		  ?>
-			<a href="" data-toggle="modal" data-target="<?php echo ($this->user_auth->is_logged_in()) ? '.doc-modal-ma' : ''; ?>" data-id="<?php echo $row['ma_id']; ?>" data-idmodal="<?php echo $row['ma_id']; ?>" class="modalcaller-ma">
+			<a href="<?php echo site_url('putusan-mahkamah-agung/read/'.$row['ma_url']); ?>" data-toggle="modal" data-target=".doc-modal-ma" data-remote="false" class="modalcaller-ma" data-id="<?php echo $row['ma_id']; ?>" id="<?php echo $row['ma_id']; ?>">
 			  Putusan Mahkamah Agung<br />
 			  <?php echo $row['ma_number']; ?>
 			</a>

@@ -165,12 +165,13 @@ foreach($result as $row)
 <div class="search-result-item">
   <div class="search-result-item-meta"><?php echo format_tanggal_indonesia($row['tanggal'], 'long'); ?> | View : <?php echo $row['view']; ?><!-- | <a href="">Download PDF</a>--></div>
   <div class="search-result-item-title">
-    <a href="" data-toggle="modal" data-target="<?php echo ($this->user_auth->is_logged_in()) ? '.doc-modal' : ''; ?>" id="<?php echo $row['id']; ?>" data-idmodal="<?php echo $row['id']; ?>" class="modalcaller"><?php echo $row['jenis_dokumen_lengkap']; ?> Nomor: <?php echo $row['nomordokumen']; ?></a>
+    <!-- <a href="" data-toggle="modal" data-target="<?php echo ($this->user_auth->is_logged_in()) ? '.doc-modal' : ''; ?>" id="<?php echo $row['id']; ?>" data-idmodal="<?php echo $row['id']; ?>" class="modalcaller"><?php echo $row['jenis_dokumen_lengkap']; ?> Nomor: <?php echo $row['nomordokumen']; ?></a> -->
+    <a href="<?php echo site_url('peraturan-pajak/read/'.$row['permalink']); ?>" data-toggle="modal" data-target=".doc-modal" id="<?php echo $row['id']; ?>" data-idmodal="<?php echo $row['id']; ?>" data-remote="false"  class="modalcaller"><?php echo $row['jenis_dokumen_lengkap']; ?> Nomor: <?php echo $row['nomordokumen']; ?></a>
   </div>
   <div class="search-result-item-excerpt">
     <?php echo $row['perihal']; ?>
   </div>
-  <div class="search-result-item-more"><a href="" data-toggle="modal" data-target=".doc-modal" id="<?php echo $row['id']; ?>" data-idmodal="<?php echo $row['id']; ?>" class="modalcaller">Read More</a></div>
+  <div class="search-result-item-more"><a href="<?php echo site_url('peraturan-pajak/read/'.$row['permalink']); ?>" data-toggle="modal" data-target=".doc-modal" id="<?php echo $row['id']; ?>" data-idmodal="<?php echo $row['id']; ?>" data-remote="false"  class="modalcaller">Read More</a></div>
 </div>
 <?php
 }

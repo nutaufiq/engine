@@ -44,6 +44,14 @@ class regulasi_pajak_model extends MY_Model {
         return $this->db->get($this->table)->row_array();
     }
 
+    function get_publish_by($find, $key)
+    {
+        $this->db->where($find, $key);
+        $this->db->where('publish', 1);
+
+        return $this->db->get($this->table)->row_array();
+    }
+
     function get_all_publish_perpage($page, $perpage)
     {
         $start = ($page-1)*$perpage;

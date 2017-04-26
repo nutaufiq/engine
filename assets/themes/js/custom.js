@@ -24,7 +24,18 @@ $('#saran-box').click(function(){
     $('.saran-body').slideToggle();
 });
 
-$('#inside-login').click(function(){
+$(document).on('click', '#inside-login', function(event){
+  $('.modal-login').modal('show');
+
+  return false;
+});
+
+$(document).on('click', '#readmore-login', function(event){
+  $('.doc-modal').modal('hide');
+  $('.doc-modal-pp').modal('hide');
+  $('.doc-modal-p3b').modal('hide');
+  $('.doc-modal-ma').modal('hide');
+
   $('.modal-login').modal('show');
 
   return false;
@@ -181,30 +192,38 @@ $('#modaldocument-ma').on('shown.bs.modal', function () {
 });
 
 
-$('.modalcaller').mousedown(function(e){ //CEK klik mana
-  var idval = $(this).attr('id');
-  if(e.which==3){ //IF klik Kanan buat session
-    localStorage["modalId"] = idval;
-  }
-});
+// $('.modalcaller').mousedown(function(e){ //CEK klik mana
+//   var idval = $(this).attr('id');
+//   if(e.which==3){ //IF klik Kanan buat session
+//     localStorage["modalId"] = idval;
+//   }
+// });
 
-$(document).on('click', '.modalcaller-newtab', function(){
-  var idval = $(this).attr('id');
-  localStorage["modalId"] = idval;
+// $(document).on('click', '.modalcaller-newtab', function(){
+//   var idval = $(this).attr('id');
+//   localStorage["modalId"] = idval;
 
-  window.open($(this).attr('href')); 
+//   window.open($(this).attr('href')); 
   
-  return false;
-});
+//   return false;
+// });
 
-$(document).on('click', '.modalcaller', function(){
+$(document).on('click', '.modalcaller', function(event, a){
 
   $('#list-terkait').html('');
   $('#list-lampiran').html('');
   $('#list-riwayat').html('');
   $('#list-status').html('');
+  $('#list-social').html('Tunggu..');
 
-  var idval = $(this).attr('id');
+  if(a)
+  {
+    var idval = a;
+  }
+  else
+  {
+    var idval = $(this).attr('id');
+  }
 
   //loading
   var loading = '<div id="loadingstate"><img src="'+base_url+'assets/themes/images/preloader.gif"><br>MEMUAT...</div>';
@@ -216,8 +235,16 @@ $(document).on('click', '.modalcaller', function(){
         
         if(data == 0)
         {
-          $('.doc-modal').modal('hide');
-          $('.modal-login').modal('show');
+          // $('.doc-modal').modal('hide');
+          // $('.modal-login').modal('show');
+
+          $("#nocompare-wrapper").scrollTo(1);
+          //$('.doc-modal').modal('show');
+          $('#loadingstate').fadeOut('fast');
+          $('.nocompare-content').html(data);
+
+          $('#btn-sanding').attr('data-id', idval);
+          $('#btn-favorit').attr('data-id', idval);
         }
         else
         {
@@ -230,6 +257,13 @@ $(document).on('click', '.modalcaller', function(){
           $('#btn-favorit').attr('data-id', idval);
         }
   });   
+
+  var get_social_url = base_url+'peraturan_pajak/get_social';
+  $.post(get_social_url, { id: idval })
+      .done(function( data ) {
+
+        $('.list-social').html(data);
+  });
 
   var get_check_fav_url = base_url+'peraturan_pajak/check_favourite';
   $.post(get_check_fav_url, { id: idval })
@@ -313,6 +347,7 @@ $(document).on('click', '.modalcaller', function(){
   });
 
 });
+
 
 //restart when modal close
 $('.doc-modal').on('hidden.bs.modal', function (e) {
@@ -1571,8 +1606,17 @@ $(document).on("click", "#btn-id", function(event){
 });
 
 // $('.modalcaller-p3b').click(function(){
-$(document).on('click', '.modalcaller-p3b', function(){
+$(document).on('click', '.modalcaller-p3b', function(event, a){
   var p3b_id = $(this).attr('data-id');
+
+  if(a)
+  {
+    var p3b_id = a;
+  }
+  else
+  {
+    var p3b_id = $(this).attr('data-id');
+  }
 
   //set wrapper
   $('#nocompare-wrapper-p3b').show();
@@ -1593,8 +1637,19 @@ $(document).on('click', '.modalcaller-p3b', function(){
 
         if(json.st == 0)
         {
-          $('.doc-modal-p3b').modal('hide');
-          $('.modal-login').modal('show');
+          // $('.doc-modal-p3b').modal('hide');
+          // $('.modal-login').modal('show');
+
+          $('#btn-sanding-p3b').show();
+          $('#btn-favorit-p3b').show();
+
+          $('.doc-modal-p3b').attr('cur-doc-1', p3b_id);
+
+          $('.doc-modal-p3b').modal('show');
+          $('.nocompare-content-p3b').html(json.full_content);
+          $('.nocompare-content-p3b').find('#id').hide();
+
+          if(json.favourite == 1) $('#btn-favorit-p3b').find('.glyphicon-heart').addClass('active-ico');
         }
         else
         {
@@ -1609,6 +1664,13 @@ $(document).on('click', '.modalcaller-p3b', function(){
 
           if(json.favourite == 1) $('#btn-favorit-p3b').find('.glyphicon-heart').addClass('active-ico');
         }
+  });
+
+  var get_social_url = base_url+'p3b/get_social';
+  $.post(get_social_url, { id: p3b_id })
+      .done(function( data ) {
+
+        $('.list-social').html(data);
   });
 
   return false;
@@ -1732,8 +1794,16 @@ $('.doc-modal-pp').on('hidden.bs.modal', function (e) {
 });
 
 // $('.modalcaller-pp').click(function(){
-$(document).on('click', '.modalcaller-pp', function(){
-  var pp_id = $(this).attr('data-id');
+$(document).on('click', '.modalcaller-pp', function(event, a){
+
+  if(a)
+  {
+    var pp_id = a;
+  }
+  else
+  {
+    var pp_id = $(this).attr('data-id');
+  }
 
   //set wrapper
   $('#nocompare-wrapper-pp').show();
@@ -1754,8 +1824,19 @@ $(document).on('click', '.modalcaller-pp', function(){
 
         if(json.st == 0)
         {
-          $('.doc-modal-pp').modal('hide');
-          $('.modal-login').modal('show');
+          // $('.doc-modal-pp').modal('hide');
+          // $('.modal-login').modal('show');
+
+          $('#btn-sanding-pp').show();
+          $('#btn-favorit-pp').show();
+
+          $('.doc-modal-pp').attr('cur-doc-1', pp_id);
+
+          $('.doc-modal-pp').modal('show');
+          $('.nocompare-content-pp').html(json.full_content);
+          $('.nocompare-content-pp').find('#id').hide();
+
+          if(json.favourite == 1) $('#btn-favorit-pp').find('.glyphicon-heart').addClass('active-ico');
         }
         else
         {
@@ -1781,6 +1862,13 @@ $(document).on('click', '.modalcaller-pp', function(){
 				$(this).wrap('<div class="tablewrap"></div>');
 			}
 		});
+  });
+
+  var get_social_url = base_url+'putusan_pengadilan_pajak/get_social';
+  $.post(get_social_url, { id: pp_id })
+      .done(function( data ) {
+
+        $('.list-social').html(data);
   });
 
   return false;
@@ -1898,8 +1986,16 @@ $('.doc-modal-ma').on('hidden.bs.modal', function (e) {
 });
 
 // $('.modalcaller-ma').click(function(){
-$(document).on('click', '.modalcaller-ma', function(){
-  var ma_id = $(this).attr('data-id');
+$(document).on('click', '.modalcaller-ma', function(event, a){
+  
+  if(a)
+  {
+    var ma_id = a;
+  }
+  else
+  {
+    var ma_id = $(this).attr('data-id');
+  }
 
   //set wrapper
   $('#nocompare-wrapper-ma').show();
@@ -1920,8 +2016,23 @@ $(document).on('click', '.modalcaller-ma', function(){
 
         if(json.st == 0)
         {
-          $('.doc-modal-ma').modal('hide');
-          $('.modal-login').modal('show');
+          // $('.doc-modal-ma').modal('hide');
+          // $('.modal-login').modal('show');
+          $('#btn-sanding-ma').show();
+          $('#btn-favorit-ma').show();
+
+          $('.doc-modal-ma').attr('cur-doc-1', ma_id);
+
+          $('.doc-modal-ma').modal('show');
+            
+          var str = json.full_content;
+          var isicontent = str.replace(/border="0"/g, 'border="1" align="center"');
+          var isicontent = str.replace(/PUTUSAN/, "<strong>PUTUSAN</strong>");
+          var isicontent = str.replace(/DEMI KEADILAN BERDASARKAN KETUHANAN YANG MAHA ESA MAHKAMAH AGUNG/, '<strong>DEMI KEADILAN BERDASARKAN KETUHANAN YANG MAHA ESA MAHKAMAH AGUNG</strong>');
+          $('.nocompare-content-ma').html(isicontent);
+          $('.nocompare-content-ma').find('#id').hide();
+
+          if(json.favourite == 1) $('#btn-favorit-ma').find('.glyphicon-heart').addClass('active-ico');
         }
         else
         {
@@ -1941,6 +2052,13 @@ $(document).on('click', '.modalcaller-ma', function(){
 
           if(json.favourite == 1) $('#btn-favorit-ma').find('.glyphicon-heart').addClass('active-ico');
         }
+  });
+
+  var get_social_url = base_url+'putusan_mahkamah_agung/get_social';
+  $.post(get_social_url, { id: ma_id })
+      .done(function( data ) {
+
+        $('.list-social').html(data);
   });
 
   return false;

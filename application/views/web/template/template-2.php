@@ -7,6 +7,13 @@
 
     <title><?php echo $title; ?></title>
 
+    <?php
+      if(isset($meta))
+      {
+        echo $meta;
+      }
+    ?>
+
     <!-- Bootstrap -->
     <link href="<?php echo base_url(); ?>assets/themes/css/bootstrap.min.css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/themes/css/dropdowns-enhancement.css" rel="stylesheet">
@@ -14,8 +21,8 @@
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>      
     <link href="<?php echo base_url(); ?>assets/themes/css/custom.css?v=7" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/themes/css/datepicker.css" rel="stylesheet">
-	<link rel="icon" href="<?php echo base_url(); ?>favicon.ico" />
-	<link rel="shortcut icon" href="<?php echo base_url(); ?>favicon.ico" />
+	  <link rel="icon" href="<?php echo base_url(); ?>favicon.ico" />
+	  <link rel="shortcut icon" href="<?php echo base_url(); ?>favicon.ico" />
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
       <!--[if lt IE 9]>
@@ -99,6 +106,10 @@
               <a title="close" id="btn-close" class="close_modal" data-dismiss="modal" aria-label="Close"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>
             </div>
 
+            <?php
+              if(!$this->config->item('peraturan_pajak_login') || $this->user_auth->is_logged_in())
+              {
+            ?>
             <!-- TOOLS CARI -->
             <div class="modal-tools-item">
               <a title="cari" id="btn-cari"><span class="glyphicon glyphicon-search" aria-hidden="true"</span></a>
@@ -119,6 +130,9 @@
                   
               </div>
             </div>
+            <?php
+              }
+            ?>
 
             <!-- TOOLS RIWAYAT -->                
             <div class="modal-tools-item">
@@ -148,6 +162,11 @@
                   <div id="list-terkait"></div>
               </div>
             </div>
+
+            <?php
+            if($this->user_auth->is_logged_in())
+            {
+            ?>
 
             <!-- TOOLS SALIN -->   
              <div class="modal-tools-item">
@@ -181,11 +200,18 @@
               </div>
             </div>
 			
-			<!-- TOOLS SHARE --> 
+            <?php
+            }
+            ?>
+
+			      <!-- TOOLS SHARE -->
             <div class="modal-tools-item">
-              <a title="share" id="btn-share"><span class="glyphicon glyphicon-share" aria-hidden="true"></span></a>
+              <a title="share" id="btn-share"><span class="glyphicon glyphicon-share-alt" aria-hidden="true"></span></a>
               <div class="modal-tools-item-content">
-                <div class="tools-item-title">SHARE</div>
+                <!-- <div class="tools-item-title">SHARE</div> -->
+                <div class="tools-item-social list-social">
+                  Tunggu..
+                </div>
               </div>
             </div>
           
@@ -194,8 +220,19 @@
           <!--<div class="doc-logo"><img src="<?php echo site_url(); ?>assets/themes/images/logo-doc-new.png"></div>-->
           <div class="modal-desc" id="modal-contents">
 
+            <?php
+              if($this->config->item('peraturan_pajak_login') && !$this->user_auth->is_logged_in())
+              {
+                $notlogin_class = "nologin";
+              }
+              else
+              {
+                $notlogin_class = "";
+              }
+            ?>
+
             <!-- KALO BUKAN COMPARE -->
-            <div class="nocompare-content" id="nocompare-wrapper"><div id="loadingstate"><img src="<?php echo site_url(); ?>assets/themes/images/preloader.gif"><br>MEMUAT...</div></div>
+            <div class="nocompare-content <?php echo $notlogin_class; ?>" id="nocompare-wrapper"><div id="loadingstate"><img src="<?php echo site_url(); ?>assets/themes/images/preloader.gif"><br>MEMUAT...</div></div>
 
             <!-- KALO COMPARE -->
             <div id="compare-wrapper">
@@ -239,6 +276,10 @@
               <a title="close" id="btn-close" class="close_modal" data-dismiss="modal" aria-label="Close"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>
             </div>
 
+            <?php
+              if(!$this->config->item('p3b_login') || $this->user_auth->is_logged_in())
+              {
+            ?>
             <!-- TOOLS CARI -->
             <div class="modal-tools-item">
                 <a title="cari" id="btn-cari"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></a>
@@ -258,6 +299,9 @@
                     </div>                    
                 </div>
             </div>
+            <?php
+              }
+            ?>
 
             <!-- TOOLS RIWAYAT
             <div class="modal-tools-item">
@@ -268,6 +312,10 @@
             </div>
             -->
 
+            <?php
+            if($this->user_auth->is_logged_in())
+            {
+            ?>
             <div class="modal-tools-item">
                 <a title="salin" id="btn-salin-p3b"><span class="glyphicon glyphicon-duplicate" aria-hidden="true"></span></a>
                 <div class="modal-tools-item-content">
@@ -292,20 +340,39 @@
                     <div class="tools-item-title">FAVORIT</div>
                 </div>
             </div>
-			<!-- TOOLS SHARE --> 
+            <?php
+            }
+            ?>
+
+			      <!-- TOOLS SHARE -->
             <div class="modal-tools-item">
-              <a title="share" id="btn-share"><span class="glyphicon glyphicon-share" aria-hidden="true"></span></a>
+              <a title="share" id="btn-share"><span class="glyphicon glyphicon-share-alt" aria-hidden="true"></span></a>
               <div class="modal-tools-item-content">
-                <div class="tools-item-title">SHARE</div>
+                <!-- <div class="tools-item-title">SHARE</div> -->
+                <div class="tools-item-social list-social">
+                  Tunggu..
+                </div>
               </div>
             </div>
+
           </div>
           
-          <!--<div class="doc-logo"><img src="<?php echo site_url(); ?>assets/themes/images/logo-doc-new.png"></div>-->
+          <!-- <div class="doc-logo"><img src="<?php echo site_url(); ?>assets/themes/images/logo-doc-new.png"></div> -->
           <div class="modal-desc" id="modal-contents-p3b">
 
+            <?php
+              if($this->config->item('p3b_login') && !$this->user_auth->is_logged_in())
+              {
+                $notlogin_class = "nologin";
+              }
+              else
+              {
+                $notlogin_class = "";
+              }
+            ?>
+
             <!-- KALO BUKAN COMPARE -->
-            <div class="nocompare-content nocompare-content-p3b" id="nocompare-wrapper-p3b"><div id="loadingstate"><img src="<?php echo site_url(); ?>assets/themes/images/preloader.gif"><br>MEMUAT...</div></div>
+            <div class="nocompare-content nocompare-content-p3b <?php echo $notlogin_class; ?>" id="nocompare-wrapper-p3b"><div id="loadingstate"><img src="<?php echo site_url(); ?>assets/themes/images/preloader.gif"><br>MEMUAT...</div></div>
 
             <!-- KALO COMPARE -->
             <div id="compare-wrapper-p3b">
@@ -348,6 +415,10 @@
               <a title="close" id="btn-close" class="close_modal" data-dismiss="modal" aria-label="Close"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>
             </div>
 
+            <?php
+              if(!$this->config->item('putusan_pengadilan_login') || $this->user_auth->is_logged_in())
+              {
+            ?>
             <!-- TOOLS CARI -->
             <div class="modal-tools-item">
                 <a title="cari" id="btn-cari"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></a>
@@ -367,6 +438,9 @@
                     </div>                    
                 </div>
             </div>
+            <?php
+              }
+            ?>
 
             <!-- TOOLS RIWAYAT
             <div class="modal-tools-item">
@@ -377,6 +451,10 @@
             </div>
             -->
 
+            <?php
+            if($this->user_auth->is_logged_in())
+            {
+            ?>
             <div class="modal-tools-item">
                 <a title="salin" id="btn-salin-pp"><span class="glyphicon glyphicon-duplicate" aria-hidden="true"></span></a>
                 <div class="modal-tools-item-content">
@@ -404,20 +482,39 @@
                     <div class="tools-item-title">FAVORIT</div>
                 </div>
             </div>
-			<!-- TOOLS SHARE --> 
+            <?php
+            }
+            ?>
+
+			      <!-- TOOLS SHARE -->
             <div class="modal-tools-item">
-              <a title="share" id="btn-share"><span class="glyphicon glyphicon-share" aria-hidden="true"></span></a>
+              <a title="share" id="btn-share"><span class="glyphicon glyphicon-share-alt" aria-hidden="true"></span></a>
               <div class="modal-tools-item-content">
-                <div class="tools-item-title">SHARE</div>
+                <!-- <div class="tools-item-title">SHARE</div> -->
+                <div class="tools-item-social list-social">
+                  Tunggu..
+                </div>
               </div>
             </div>
+
           </div>
           
-          <!--<div class="doc-logo"><img src="<?php echo site_url(); ?>assets/themes/images/logo-doc-new.png"></div>-->
+          <!-- <div class="doc-logo"><img src="<?php echo site_url(); ?>assets/themes/images/logo-doc-new.png"></div> -->
           <div class="modal-desc" id="modal-contents-pp">
 
+            <?php
+              if($this->config->item('putusan_pengadilan_login') && !$this->user_auth->is_logged_in())
+              {
+                $notlogin_class = "nologin";
+              }
+              else
+              {
+                $notlogin_class = "";
+              }
+            ?>
+
             <!-- KALO BUKAN COMPARE -->
-            <div class="nocompare-content nocompare-content-pp" id="nocompare-wrapper-pp"><div id="loadingstate"><img src="<?php echo site_url(); ?>assets/themes/images/preloader.gif"><br>MEMUAT...</div></div>
+            <div class="nocompare-content nocompare-content-pp <?php echo $notlogin_class; ?>" id="nocompare-wrapper-pp"><div id="loadingstate"><img src="<?php echo site_url(); ?>assets/themes/images/preloader.gif"><br>MEMUAT...</div></div>
 
             <!-- KALO COMPARE -->
             <div id="compare-wrapper-pp">
@@ -460,6 +557,10 @@
               <a title="close" id="btn-close" class="close_modal" data-dismiss="modal" aria-label="Close"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>
             </div>
 
+            <?php
+              if(!$this->config->item('putusan_ma_login') || $this->user_auth->is_logged_in())
+              {
+            ?>
             <!-- TOOLS CARI -->
             <div class="modal-tools-item">
                 <a title="cari" id="btn-cari"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></a>
@@ -479,7 +580,14 @@
                     </div>                    
                 </div>
             </div>
+            <?php
+              }
+            ?>
 
+            <?php
+            if($this->user_auth->is_logged_in())
+            {
+            ?>
             <div class="modal-tools-item">
                 <a title="salin" id="btn-salin-ma" data-clipboard-target="modal-contents-ma"><span class="glyphicon glyphicon-duplicate" aria-hidden="true"></span></a>
                 <div class="modal-tools-item-content">
@@ -504,20 +612,39 @@
                     <div class="tools-item-title">FAVORIT</div>
                 </div>
             </div>
-			<!-- TOOLS SHARE --> 
+            <?php
+            }
+            ?>
+
+			      <!-- TOOLS SHARE -->
             <div class="modal-tools-item">
-              <a title="share" id="btn-share"><span class="glyphicon glyphicon-share" aria-hidden="true"></span></a>
+              <a title="share" id="btn-share"><span class="glyphicon glyphicon-share-alt" aria-hidden="true"></span></a>
               <div class="modal-tools-item-content">
-                <div class="tools-item-title">SHARE</div>
+                <!-- <div class="tools-item-title">SHARE</div> -->
+                <div class="tools-item-social list-social">
+                  Tunggu..
+                </div>
               </div>
             </div>
+
           </div>
           
-          <!--<div class="doc-logo"><img src="<?php echo site_url(); ?>assets/themes/images/logo-doc-new.png"></div>-->
+          <!-- <div class="doc-logo"><img src="<?php echo site_url(); ?>assets/themes/images/logo-doc-new.png"></div> -->
           <div class="modal-desc" id="modal-contents-ma">
 
+            <?php
+              if($this->config->item('putusan_ma_login') && !$this->user_auth->is_logged_in())
+              {
+                $notlogin_class = "nologin";
+              }
+              else
+              {
+                $notlogin_class = "";
+              }
+            ?>
+
             <!-- KALO BUKAN COMPARE -->
-            <div class="nocompare-content nocompare-content-ma" id="nocompare-wrapper-ma"><div id="loadingstate"><img src="<?php echo site_url(); ?>assets/themes/images/preloader.gif"><br>MEMUAT...</div></div>
+            <div class="nocompare-content nocompare-content-ma <?php echo $notlogin_class; ?>" id="nocompare-wrapper-ma"><div id="loadingstate"><img src="<?php echo site_url(); ?>assets/themes/images/preloader.gif"><br>MEMUAT...</div></div>
 
             <!-- KALO COMPARE -->
             <div id="compare-wrapper-ma">
@@ -830,6 +957,12 @@
       }
 
     </script>
+    <?php
+      if(isset($javascript))
+      {
+        echo $javascript;
+      }
+    ?>
 <!-- Facebook Pixel Code -->
 <script>
 !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?

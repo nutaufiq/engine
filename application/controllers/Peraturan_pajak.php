@@ -176,6 +176,82 @@ class Peraturan_pajak extends My_Controller {
 		$this->template->load('web/template/template-2', 'web/peraturanpajak/peraturanpajak', $data);
 	}
 
+	public function get_social()
+	{
+		$id = $this->input->post('id');
+
+		$data = $this->regulasi_pajak_model->get($id);
+
+		$url = site_url('peraturan-pajak/read/'.$data['permalink']);
+
+		$html ='<a href="https://www.facebook.com/sharer/sharer.php?u='.$url.'" target="_blank" id="share-facebook"><span class="socicon socicon-facebook"></a>
+				<a href="https://twitter.com/intent/tweet?url='.$url.'" target="_blank" id="share-twitter"><span class="socicon socicon-twitter"></a>
+				<a href="https://www.linkedin.com/shareArticle?url='.$url.'" target="_blank" id="share-linkedin"><span class="socicon socicon-linkedin"></a>
+				<a href="https://plus.google.com/share?url='.$url.'" target="_blank" id="share-googleplus"><span class="socicon socicon-googleplus"></a>
+				<a href="http://line.me/R/msg/text/?'.$url.'" target="_blank" id="share-line"><span class="socicon socicon-line"></a>
+				<a href="whatsapp://send?text='.$url.'" target="_blank" id="share-whatsapp"><span class="socicon socicon-whatsapp"></a>';
+
+		echo $html;
+	}
+
+	public function read($url)
+	{
+		/*PP searchbox*/
+        $ls_topik = $this->topik_model->get_all_publish_order_by('topik_id', 'asc');
+        //$ls_jenis_dokumen = $this->jenis_dokumen_model->get_all_publish_order_by('jenis_dokumen_name', 'desc');
+        $ls_jenis_dokumen = $this->kelompok_model->get_all_publish_order_by('noid', 'asc');
+
+        $data['ls_key'] = '';
+        $data['ls_topik'] = $ls_topik;
+        $data['ls_jenis_dokumen'] = $ls_jenis_dokumen;
+        $data['ls_tanggal_from'] = '';
+        $data['ls_tanggal_to'] = '';
+        $data['ls_tahun'] = $this->regulasi_pajak_model->get_all_year();;
+        $data['ls_nomor_from'] = '';
+        $data['ls_nomor_to'] = '';
+        /*--------------*/
+
+        $result = $this->regulasi_pajak_model->get_publish_by('permalink', $url);
+
+        $data['result'] = $this->regulasi_pajak_model->get_publish_by('permalink', $url);
+
+		$data['javascript'] = 	"<script>
+							      $(document).ready(function(){
+							        $('.modalcaller#".$result['id']."').trigger( 'click', [ '".$result['id']."' ]  );
+
+							        return false;
+							      });
+							    </script>";
+
+		$title = $result['jenis_dokumen_lengkap'].' Nomor: '.$result['nomordokumen'].' - Peraturan Pajak - '.$this->config->item('web_title');
+		$description = substr(trim(preg_replace('/\s\s+/', ' ', strip_tags($result['body_final']))), 0, 255);
+
+		$keywords = $result['jenis_dokumen_lengkap'].' '.$result['nomordokumen'];
+		$keywords = str_replace(" ", ", ", strtolower($keywords));
+
+		$data['meta'] =  '<meta name="description" content="'.$description.'">
+						  <meta name="keywords" content="ddtc, taxengine, '.$keywords.'">
+						  <meta name="author" content="TAX ENGINE">
+
+						  <!-- facebook -->
+						  <meta property="og:url"           content="'.current_url().'" />
+						  <meta property="og:type"          content="website" />
+						  <meta property="og:title"         content="'.$title.'" />
+						  <meta property="og:description"   content="'.$description.'" />
+						  <meta property="og:image"         content="'.site_url('cover.jpg').'" />
+
+						  <!-- twitter -->
+						  <meta name="twitter:card" content="summary">
+						  <meta name="twitter:url" content="'.current_url().'">
+						  <meta name="twitter:title" content="'.$title.'">
+						  <meta name="twitter:description" content="'.$description.'">
+						  <meta name="twitter:image" content="'.site_url('cover.jpg').'">';
+
+		$this->template->set('container_class', 'search-page');
+		$this->template->set('title', $title.' - Peraturan Pajak - '.$this->config->item('web_title'));
+		$this->template->load('web/template/template-2', 'web/peraturanpajak/peraturanpajak-read', $data);
+	}
+
 	public function topsearch()
 	{
 		$this->load->library('form_validation');
@@ -820,7 +896,90 @@ class Peraturan_pajak extends My_Controller {
 				}
 			}
 		} else {
-			echo '0';
+			// echo '0';
+			$id = $this->input->post('id');
+
+			$regulasi_pajak = $this->regulasi_pajak_model->get($id);
+			$lamp1_file = $regulasi_pajak['lamp1_file'];
+			$id_dj = $regulasi_pajak['id_dj'];
+
+			if(!$lamp1_file || $lamp1_file == NULL)
+			{
+				if(!$id_dj || $id_dj == NULL)
+				{
+					$url_lampiran = '<ul class="tools-list-items"><li>Tidak ada lampiran</li></ul>';
+					//$url_lampiran = '<ul class="tools-list-items"><li>Segera hadir.</li></ul>';
+
+					echo json_encode(
+									array(
+											'st' => 0,
+											'url' => $url_lampiran
+											)
+									);
+				}
+				else
+				{
+					$path = file_get_contents(base_url().'/assets/download/peraturanpajak/lampiran/'.$id_dj.'.pdf');
+
+					$filename = './assets/download/peraturanpajak/lampiran/'.$id_dj.'.pdf';
+
+					if(file_exists($filename)) 
+					{
+						$url_lampiran = '<ul class="tools-list-items"><li><a href="'.site_url().'peraturan-pajak/download/lampiran/'.$id.'" target="_blank">Lampiran '.$regulasi_pajak['jenis_dokumen_lengkap'].' Nomor '.$regulasi_pajak['nomordokumen'].'</a></li></ul>';
+						//$url_lampiran = '<ul class="tools-list-items"><li>Segera hadir.</li></ul>';
+
+						echo json_encode(
+										array(
+												'st' => 1,
+												'url' => $url_lampiran
+												)
+										);
+					} 
+					else 
+					{
+						$url_lampiran = '<ul class="tools-list-items"><li>Tidak ada lampiran</li></ul>';
+						//$url_lampiran = '<ul class="tools-list-items"><li>Segera hadir.</li></ul>';
+
+						echo json_encode(
+										array(
+												'st' => 0,
+												'url' => $url_lampiran
+												)
+										);
+					}
+				}
+			}
+			else
+			{
+				$path = file_get_contents(base_url().'/assets/download/peraturanpajak/file/'.$lamp1_file);
+
+				$filename = './assets/download/peraturanpajak/file/'.$lamp1_file;
+
+				if(file_exists($filename)) 
+				{
+					$url_lampiran = '<ul class="tools-list-items"><li><a href="'.site_url().'peraturan-pajak/download/lampiran/'.$id.'" target="_blank">Lampiran '.$regulasi_pajak['jenis_dokumen_lengkap'].' Nomor '.$regulasi_pajak['nomordokumen'].'</a></li></ul>';
+					//$url_lampiran = '<ul class="tools-list-items"><li>Segera hadir.</li></ul>';
+					
+					echo json_encode(
+									array(
+											'st' => 1,
+											'url' => $url_lampiran
+											)
+									);
+				}
+				else
+				{
+					$url_lampiran = '<ul class="tools-list-items"><li>Tidak ada lampiran</li></ul>';
+					//$url_lampiran = '<ul class="tools-list-items"><li>Segera hadir.</li></ul>';
+
+					echo json_encode(
+									array(
+											'st' => 0,
+											'url' => $url_lampiran
+											)
+									);
+				}
+			}
 		}
 	}
 
@@ -953,7 +1112,57 @@ class Peraturan_pajak extends My_Controller {
 
 			echo $terkait;
 		} else {
-			echo '0';
+			// echo '0';
+			$id = $this->input->post('id');
+
+			$regulasi_pajak = $this->regulasi_pajak_model->get($id);
+			$linklist_rp  = $regulasi_pajak['linklist'];
+			$id_o = $regulasi_pajak['id_o'];
+
+			if(!$id_o || $id_o == NULL || $id_o == 0)
+			{
+				$linklist = $linklist_rp;
+
+				if($linklist != '')
+				{
+					$terkait = print_linklist_rp($linklist);
+				}
+				else
+				{
+					$terkait = 0;
+				}
+			}
+			else
+			{
+				if(!$linklist_rp || $linklist_rp == NULL || $linklist_rp == 0)
+				{
+					$linklist = get_linklist($id_o);
+
+					if($linklist != '')
+					{
+						$terkait = print_linklist($linklist);
+					}
+					else
+					{
+						$terkait = 0;
+					}
+				}
+				else
+				{
+					$linklist = $linklist_rp;
+
+					if($linklist != '')
+					{
+						$terkait = print_linklist_rp($linklist);
+					}
+					else
+					{
+						$terkait = 0;
+					}	
+				}
+			}
+
+			echo $terkait;
 		}
 	}
 
@@ -1124,7 +1333,8 @@ class Peraturan_pajak extends My_Controller {
 
 	public function get_body_final()
 	{
-		if($this->user_auth->is_logged_in())
+		// if($this->user_auth->is_logged_in())
+		if($this->config->item('peraturan_pajak_login') && !$this->user_auth->is_logged_in())
 		{
 			$id = $this->input->post('id');
 			$pj = $this->regulasi_pajak_model->get($id);
@@ -1167,11 +1377,54 @@ class Peraturan_pajak extends My_Controller {
 	            }
 			}
 
-			echo $body_replace.'<div class="footerdoc"><img src="'.site_url().'assets/themes/images/newdocfooter.png"></div>';
+			echo '<div class="nologin-readmore"><a href="#" id="readmore-login">READ MORE</a></div>'.$body_replace.'<div class="footerdoc"><img src="'.site_url().'assets/themes/images/newdocfooter.png"></div>';
 		}
 		else
 		{
-			echo '0';
+			// echo '0';
+
+			$id = $this->input->post('id');
+			$pj = $this->regulasi_pajak_model->get($id);
+			$pj_view = $pj['view'];
+
+			$pj_view_new = (int)$pj_view+1;
+
+			$data = array('view' => $pj_view_new);
+			$this->regulasi_pajak_model->update($id, $data);
+			
+			$regulasi_pajak = $this->regulasi_pajak_model->get($id);
+
+			$id_o = $regulasi_pajak['id_o'];
+			$body_final = $regulasi_pajak['body_final'];
+
+			if(!$id_o || $id_o == NULL || $id_o == 0)
+			{
+				$linklist  = $regulasi_pajak['linklist'];
+
+				if($linklist != '') 
+				{
+	                $body_replace = regulasi_ortax_format_body_rp($linklist, $body_final);
+	            } 
+	            else
+	            {
+	                $body_replace = $body_final;
+	            }
+			}
+			else
+			{
+				$linklist = get_linklist($id_o);
+
+				if($linklist != '') 
+				{
+	                $body_replace = regulasi_ortax_format_body($linklist, $body_final);
+	            } 
+	            else
+	            {
+	                $body_replace = $body_final;
+	            }
+			}
+
+			echo $body_replace.'<div class="footerdoc"><img src="'.site_url().'assets/themes/images/newdocfooter.png"></div>';
 		}
 	}
 

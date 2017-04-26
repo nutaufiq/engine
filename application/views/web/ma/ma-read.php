@@ -56,20 +56,16 @@
   <button type="button" class="btn btn-default btn-xs" data-toggle="dropdown" aria-expanded="false" data-url="<?php echo $url_number; ?>" id="pp-nomor">Nomor <span class="glyphicon glyphicon-sort"></span></button>
 </div>
 
-<?php
-foreach($result as $row)
-{
-?>
 <div class="p3-search-item">
-  <div class="search-result-item-meta"><?php echo format_tanggal_indonesia($row['ma_create'], 'long'); ?> | View : <?php echo $row['ma_view']; ?><!-- | <a href="">Download PDF</a>--></div>
+  <div class="search-result-item-meta"><?php echo format_tanggal_indonesia($result['ma_create'], 'long'); ?> | View : <?php echo $result['ma_view']; ?><!-- | <a href="">Download PDF</a>--></div>
   <div class="p3-title">
-    <a href="<?php echo site_url('putusan-mahkamah-agung/read/'.$row['ma_url']); ?>" data-toggle="modal" data-target=".doc-modal-ma" data-remote="false" class="modalcaller-ma" data-id="<?php echo $row['ma_id']; ?>" id="<?php echo $row['ma_id']; ?>">
-      Putusan Mahkamah Agung Nomor: <?php echo $row['ma_number']; ?>
+    <a href="<?php echo site_url('putusan-mahkamah-agung/read/'.$result['ma_url']); ?>" data-toggle="modal" data-target=".doc-modal-ma" data-remote="false" class="modalcaller-ma" data-id="<?php echo $result['ma_id']; ?>" id="<?php echo $result['ma_id']; ?>">
+      Putusan Mahkamah Agung Nomor: <?php echo $result['ma_number']; ?>
     </a>
   </div>
   <div class="p3-desc">
 <?php
-  $ma_content = $row['ma_content'];
+  $ma_content = $result['ma_content'];
   $ma_content = strip_tags(html_entity_decode($ma_content));
   $ma_content = str_replace(';', '', $ma_content);
   //$ma_content = str_replace(':', '', $ma_content);
@@ -79,8 +75,3 @@ foreach($result as $row)
 ?>
   </div>
 </div>
-<?php
-}
-?>
-
-<nav class="search-pagination"><?php echo $paging; ?></nav>

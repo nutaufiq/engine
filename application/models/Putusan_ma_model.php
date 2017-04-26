@@ -12,6 +12,14 @@ class Putusan_ma_model extends MY_Model {
         parent::__construct();
     }
 
+    function get_publish_by($find, $key)
+    {
+        $this->db->where($find, $key);
+        $this->db->where('ma_status', 3);
+
+        return $this->db->get($this->table)->row_array();
+    }
+
     function get_top_view($limit = 10)
     {
         $this->db->where('ma_status', 3);
