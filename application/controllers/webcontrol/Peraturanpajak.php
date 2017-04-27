@@ -195,8 +195,8 @@ class Peraturanpajak extends CI_Controller {
                 $statuslist = implode(";", $this->input->post('statuslist'));
                 $historylist = implode(";", $this->input->post('historylist'));
 
-                //$permalink = str_replace('/', '',$nomordokumen);
-                //$permalink = str_replace('.', '',$nomordokumen);
+                $permalink = str_replace('/', ' ',$nomordokumen);
+                $permalink = str_replace('.', ' ',$nomordokumen);
                 $permalink = $jenis_dokumen_lengkap.' '.$permalink;
                 $permalink = url_title($permalink, '-', TRUE);
 
@@ -410,8 +410,8 @@ class Peraturanpajak extends CI_Controller {
                 $statuslist = implode(";", $this->input->post('statuslist'));
                 $historylist = implode(";", $this->input->post('historylist'));
 
-                //$permalink = str_replace('/', '',$nomordokumen);
-                //$permalink = str_replace('.', '',$nomordokumen);
+                $permalink = str_replace('/', ' ',$nomordokumen);
+                $permalink = str_replace('.', ' ',$nomordokumen);
                 $permalink = $jenis_dokumen_lengkap.' '.$permalink;
                 $permalink = url_title($permalink, '-', TRUE);
 

@@ -89,6 +89,7 @@ class P3b extends CI_Controller {
             $p3b_protocol_en = $this->input->post('p3b_protocol_en');
 
             $data = array(
+                    'p3b_url'           => url_title($p3b_country, '-', TRUE),
                     'p3b_country'       => $p3b_country,
                     'p3b_date_signed'   => $p3b_date_signed,
                     'p3b_date_effective'=> $p3b_date_effective,
@@ -192,6 +193,7 @@ class P3b extends CI_Controller {
             $p3b_protocol_en = $this->input->post('p3b_protocol_en');
 
             $data = array(
+                    'p3b_url'           => url_title($p3b_country, '-', TRUE),
                     'p3b_country'       => $p3b_country,
                     'p3b_date_signed'   => $p3b_date_signed,
                     'p3b_date_effective'=> $p3b_date_effective,

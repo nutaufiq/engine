@@ -83,9 +83,13 @@ class Putusanpengadilan extends CI_Controller {
          	$mengingat = $this->input->post('mengingat', FALSE);
          	$memutuskan = $this->input->post('memutuskan', FALSE);*/
 
+         	$permalink = str_replace('/', ' ',$nomor);
+            $permalink = str_replace('.', ' ',$nomor);
+            $permalink = url_title($permalink, '-', TRUE);
+
          	$data = array(
          			'name'					=> $nomor,
-         			'permalink'				=> url_title($nomor, '-', TRUE),
+         			'permalink'				=> $permalink,
          			'nomor'					=> $nomor,
          			'tahun_keputusan'		=> $tahun_keputusan,
          			'tahun_pajak'			=> $tahun_pajak,
@@ -162,9 +166,13 @@ class Putusanpengadilan extends CI_Controller {
             $mengingat = $this->input->post('mengingat', FALSE);
             $memutuskan = $this->input->post('memutuskan', FALSE);*/
 
+            $permalink = str_replace('/', ' ',$nomor);
+            $permalink = str_replace('.', ' ',$nomor);
+            $permalink = url_title($permalink, '-', TRUE);
+
          	$data = array(
                     'name'                  => $nomor,
-                    'permalink'             => url_title($nomor, '-', TRUE),
+                    'permalink'             => $permalink,
                     'nomor'                 => $nomor,
                     'tahun_keputusan'       => $tahun_keputusan,
                     'tahun_pajak'           => $tahun_pajak,

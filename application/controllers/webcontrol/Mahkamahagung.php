@@ -62,8 +62,11 @@ class Mahkamahagung extends CI_Controller {
          	$ma_year = $this->input->post('ma_year');
          	$ma_content = $this->input->post('ma_content', FALSE);
 
+         	$permalink = str_replace('/', ' ',$ma_number);
+            $permalink = str_replace('.', ' ',$ma_number);
+
          	$data = array(
-         			'ma_url'			=> url_title('Putusan Mahkamah Agung Nomor: '.$ma_number, '-', TRUE),
+         			'ma_url'			=> url_title('Putusan Mahkamah Agung Nomor: '.$permalink, '-', TRUE),
          			'ma_number'			=> $ma_number,
          			'ma_year'			=> $ma_year,
          			'ma_content'		=> $ma_content,
@@ -117,8 +120,11 @@ class Mahkamahagung extends CI_Controller {
          	if($ma_status == 0 || $ma_status == 2) $mas = 0;
          	else $mas = $ma_status;
 
+         	$permalink = str_replace('/', ' ',$ma_number);
+            $permalink = str_replace('.', ' ',$ma_number);
+
          	$data = array(
-         			'ma_url'			=> url_title('Putusan Mahkamah Agung Nomor: '.$ma_number, '-', TRUE),
+         			'ma_url'			=> url_title('Putusan Mahkamah Agung Nomor: '.$permalink, '-', TRUE),
          			'ma_number'			=> $ma_number,
          			'ma_year'			=> $ma_year,
          			'ma_content'		=> $ma_content,
